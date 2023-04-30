@@ -15,6 +15,11 @@ import pro.sky.homework_stream.model.Employee;
 public class EmployeeService {
 
     private static final int LIMIT = 10;
+    private final VerificationService verificationService;
+
+    public EmployeeService(VerificationService verificationService) {
+        this.verificationService = verificationService;
+    }
 
     private final List<Employee> employees = new ArrayList<>();
 
@@ -22,7 +27,10 @@ public class EmployeeService {
                         String lastName,
                         int department,
                         int salary) {
-        Employee employee = new Employee(firstName, lastName, department, salary);
+        Employee employee = new Employee(
+                verificationService.verificationFirstName(firstName),
+                verificationService.verificationLastName(lastName),
+                department, salary);
         if (employees.contains(employee)) {
             throw new EmployeeAlreadyAddedException();
         }
